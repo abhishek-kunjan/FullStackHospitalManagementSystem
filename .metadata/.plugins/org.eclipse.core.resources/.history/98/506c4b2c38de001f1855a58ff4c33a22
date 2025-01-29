@@ -1,0 +1,31 @@
+package com.hospital.entity;
+
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "med_order_medicines")
+public class MedOrderMedicines {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
+	@ManyToOne
+	@JoinColumn(name="medOrder" , nullable = false)
+	private MedOrder medOrder;
+	
+	@ManyToOne
+	@JoinColumn(name = "medicine_id" , nullable = false)
+	private Medicine  medicine;
+	
+	
+	
+}
