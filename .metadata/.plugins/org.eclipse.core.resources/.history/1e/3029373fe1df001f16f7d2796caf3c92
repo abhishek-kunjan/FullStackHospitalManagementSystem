@@ -1,0 +1,55 @@
+package com.hospital.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hospital.entity.Appointment;
+import com.hospital.repository.AppointmentRepository;
+
+@Service
+public class AppointmentService {
+
+	@Autowired
+	private AppointmentRepository appointmentRepository;
+
+	public Appointment saveAppointment(Appointment appointment) {
+		return appointmentRepository.save(appointment);
+	}
+
+	public List<Appointment> getAllAppointments() {
+		return appointmentRepository.findAll();
+	}
+
+	public Optional<Appointment> getAppointmentById(long id) {
+		return appointmentRepository.findById(id);
+	}
+
+	public void deleteAppointment(long id) {
+		if (appointmentRepository.existsById(id)) {
+			appointmentRepository.deleteById(id);
+		} else {
+			throw new RuntimeException("Appointment with ID :" + id + " not available");
+		}
+
+	}
+
+	public Appointment updateAppointment(long id, Appointment upadateAppointment) {
+
+		Optional<Appointment> existingAppointmentOptional = appointmentRepository.findById(id);
+
+		if (existingAppointmentOptional.isEmpty()) {
+
+			throw new RuntimeException("Appointment with ID :" + id + " not available");
+		}
+
+		Appointment newAppointment = existingAppointmentOptional.get();
+		newAppointment.setDoctor(upadateAppointment.getDoctor());
+		newAppointment.setDate(upadateAppointment.getDate());
+		newAppointment.setPatient(upadateAppointment.getPatient());
+		newAppointment.setTime(upadateAppointment.getTime());
+		return appointmentRepository.save(newAppointment);
+	}
+}

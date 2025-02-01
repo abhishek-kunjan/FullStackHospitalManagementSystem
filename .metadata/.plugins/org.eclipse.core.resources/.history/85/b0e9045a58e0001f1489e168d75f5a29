@@ -1,0 +1,51 @@
+package com.hospital.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hospital.entity.Medicine;
+import com.hospital.repository.MedicineRepository;
+
+@Service
+public class MedicineService {
+
+	@Autowired
+	private MedicineRepository medicineRepository;
+
+	public Medicine saveMedicine(Medicine medicine) {
+		return medicineRepository.save(medicine);
+	}
+
+	public Optional<Medicine> getMedicineById(long id) {
+		return medicineRepository.findById(id);
+	}
+
+	public List<Medicine> getAllMedicines() {
+		return medicineRepository.findAll();
+	}
+
+	public void deleteMedicineById(long id) {
+		if (medicineRepository.findById(id).isPresent()) {
+			medicineRepository.deleteById(id);
+		}
+		else {
+			throw new RuntimeException("Medicine with ID :" + id + " not found"));
+		}
+	}
+
+	public Medicine updateMedicine(Long id, Medicine updateMedicine) {
+
+		Medicine newMedicine = medicineRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Appointment with ID :" + id + " not found"));
+
+		newMedicine.setName(updateMedicine.getName());
+		newMedicine.setBrand(updateMedicine.getBrand());
+		newMedicine.setPrice(updateMedicine.getPrice());
+		return medicineRepository.save(newMedicine);
+
+	}
+
+}

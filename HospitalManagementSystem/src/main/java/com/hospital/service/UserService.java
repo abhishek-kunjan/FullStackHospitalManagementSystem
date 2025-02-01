@@ -1,0 +1,54 @@
+package com.hospital.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hospital.entity.User;
+import com.hospital.repository.UserRepository;
+
+@Service
+public class UserService {
+
+	@Autowired
+	private UserRepository userRepository;
+
+	public User saveUser(User user) {
+		return userRepository.save(user);
+
+	}
+
+	public Optional<User> getUserById(long id) {
+		return userRepository.findById(id);
+
+	}
+
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
+
+	}
+
+	public void deleteUserById(long id) {
+		if (userRepository.existsById(id)) {
+
+			userRepository.deleteById(id);
+		} else {
+			throw new RuntimeException("User with ID :" + id + " not found");
+		}
+	}
+
+	public User updateUser(long id, User updateUser) {
+
+		User newUser = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("User with ID :" + id + " not found"));
+
+		newUser.setEmail(updateUser.getEmail());
+		newUser.setUsername(updateUser.getUsername());
+		newUser.setRole(updateUser.getRole());
+		return userRepository.save(newUser);
+
+	}
+
+}

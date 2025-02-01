@@ -1,0 +1,52 @@
+package com.hospital.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hospital.entity.Appointment;
+import com.hospital.repository.AppointmentRepository;
+
+@Service
+public class AppointmentService {
+
+	@Autowired
+	private AppointmentRepository appointmentRepository;
+
+	public Appointment saveAppointment(Appointment appointment) {
+		return appointmentRepository.save(appointment);
+	}
+
+	public List<Appointment> getAllAppointments() {
+		return appointmentRepository.findAll();
+	}
+
+	public Optional<Appointment> getAppointmentById(long id) {
+		return appointmentRepository.findById(id);
+	}
+
+	public void deleteAppointment(long id) {
+		if (appointmentRepository.existsById(id)) {
+			appointmentRepository.deleteById(id);
+		} else {
+			throw new RuntimeException("Appointment with ID :" + id + " not found");
+		}
+
+	}
+
+	public Appointment updateAppointment(long id, Appointment updateAppointment) {
+
+		Appointment newAppointment = appointmentRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Doctor with ID :" + id + " not found");
+
+		
+		
+		newAppointment.setDoctor(updateAppointment.getDoctor());
+		newAppointment.setDate(updateAppointment.getDate());
+		newAppointment.setPatient(updateAppointment.getPatient());
+		newAppointment.setTime(updateAppointment.getTime());
+		return appointmentRepository.save(newAppointment);
+	}
+}

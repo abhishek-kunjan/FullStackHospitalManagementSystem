@@ -1,0 +1,53 @@
+package com.hospital.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hospital.entity.Role;
+
+import com.hospital.repository.RoleRepository;
+
+@Service
+public class RoleService {
+
+	@Autowired
+	private RoleRepository roleRepository;
+
+	public Role saveRole(Role role) {
+		return roleRepository.save(role);
+
+	}
+
+	public List<Role> getRoles() {
+		return roleRepository.findAll();
+	}
+
+	public Optional<Role> getRoleById(Long id) {
+		Optional<Role> role = roleRepository.findById(id);
+		return role;
+
+	}
+
+	public void deleteRoleById(long id) {
+		roleRepository.deleteById(id);
+	}
+
+	public Role updateRole(long id, Role updateRole) {
+
+		Optional<Role> existingRoleOptional = roleRepository.findById(id);
+
+		if (existingRoleOptional.isPresent()) {
+
+			Role existingRole = existingRoleOptional.get();
+			existingRole.setName(updateRole.getName());
+
+			return roleRepository.save(existingRole);
+
+		}
+		return null;
+	}
+
+}

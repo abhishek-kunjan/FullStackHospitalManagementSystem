@@ -1,0 +1,21 @@
+package com.hospital.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hospital.entity.Role;
+import com.hospital.repository.RoleRepository;
+
+@Service
+public class RoleService {
+
+	@Autowired
+	private RoleRepository roleRepository;
+
+	public Role saveRole(Role role) {
+		Role role2 = roleRepository.save(role);
+		return role;
+
+	}
+
+}

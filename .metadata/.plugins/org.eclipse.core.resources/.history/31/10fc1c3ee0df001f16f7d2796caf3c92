@@ -1,0 +1,55 @@
+package com.hospital.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.management.relation.RoleNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hospital.entity.Role;
+
+import com.hospital.repository.RoleRepository;
+
+@Service
+public class RoleService {
+
+	@Autowired
+	private RoleRepository roleRepository;
+
+	public Role saveRole(Role role) {
+		return roleRepository.save(role);
+
+	}
+
+	public List<Role> getRoles() {
+		return roleRepository.findAll();
+	}
+
+	public Optional<Role> getRoleById(Long id) {
+		Optional<Role> role = roleRepository.findById(id);
+		return role;
+
+	}
+
+	public void deleteRoleById(long id) {
+		if (roleRepository.existsById(id)) {
+
+			roleRepository.deleteById(id);
+		} else {
+			throw new RuntimeException("Role with ID :" + id + " not found");
+		}
+	}
+
+	public Role updateRole(long id, Role updateRole) {
+
+		Role newRole = roleRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Role with ID: " + id + " not found"));
+
+		newRole.setName(updateRole.getName());
+
+		return roleRepository.save(newRole);
+
+	}
+}
